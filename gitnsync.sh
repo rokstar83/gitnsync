@@ -20,30 +20,29 @@
 #############################################################################
 
 if [[ $# = 0 ]]; then
-		projects_dir=$PWD
+    projects_dir=$PWD
 elif [[ $# = 1 ]]; then
-		projects_dir=$1
+    projects_dir=$1
 elif [[ $# = 2 ]]; then
-		opt=$1
-		projects_dir=$2
+    opt=$1
+    projects_dir=$2
 else
-		echo "gitnsync [option] [dir]"
-		echo "  options: "
-		echo "    nofetch"
+    echo "gitnsync [option] [dir]"
+    echo "  options: "
+    echo "    nofetch"
 fi
 
 for project in $projects_dir/*; do
-		if [[ -d "${project}/.git" ]]; then
-				cd "${project}"
-				if [ "$opt" != "nofetch" ]; then
-						# git remote update > /dev/null 2>&1
-						git remote update
-				fi
-				results=$(git status -sb | grep -E 'behind|ahead')
-				if [ "$results" != "" ]; then
-						echo "$(basename $project):"						
-						echo $results
-						cd ..
-				fi
-		fi
+    if [[ -d "${project}/.git" ]]; then
+        cd "${project}"
+        if [ "$opt" != "nofetch" ]; then
+            git remote update > /dev/null 2>&1            
+        fi
+        results=$(git status -sb | grep -E 'behind|ahead')
+        if [ "$results" != "" ]; then
+            echo "$(basename $project):"            
+            echo $results
+            cd ..
+        fi
+    fi
 done
